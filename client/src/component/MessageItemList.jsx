@@ -237,6 +237,7 @@ export const MessageItemList = ({ onSelectUser }) => {
             Find Users
           </button>
         </div>
+        <hr />
       </div>
       {/* Conditionally render friends or requests based on the selected view */}
       <div className="space-y-2 overflow-y-auto scrollbar-hide h-[80%]">

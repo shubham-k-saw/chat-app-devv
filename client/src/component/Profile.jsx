@@ -24,7 +24,7 @@ const Profile = () => {
   const [isPasswordChangeDisabled, setIsPasswordChangeDisabled] =
     useState(false);
 
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Function to handle file selection
   const handleProfilePicChange = (e) => {
@@ -57,10 +57,16 @@ const Profile = () => {
     try {
       const response = await uploadProfilePicture(formData);
 
-      setUser((prevUser) => ({
-        ...prevUser,
-        profilePicture: response.data.profilePicture,
-      }));
+      setUser((prevUser) => {
+        const updatedUserDetails = {
+          ...prevUser,
+          profilePicture: response.data.profilePicture,
+        };
+
+        localStorage.setItem("userInfo",JSON.stringify(updatedUserDetails));
+        return updatedUserDetails;
+      });
+
       setUploadStatus("Profile picture uploaded successfully!");
       setTimeout(() => setUploadStatus(""), 3000); // Show message for 3 seconds
     } catch (error) {
@@ -79,7 +85,15 @@ const Profile = () => {
       // Send request to backend to remove profile picture
       await deleteProfilePicture();
 
-      setUser((prevUser) => ({ ...prevUser, profilePicture: null }));
+      setUser((prevUser) => {
+        const updatedUserDetails = {
+          ...prevUser,
+          profilePicture: null,
+        };
+
+        localStorage.setItem("userInfo",JSON.stringify(updatedUserDetails));
+        return updatedUserDetails;
+      });
       setUploadStatus("Profile picture removed successfully.");
       setTimeout(() => setUploadStatus(""), 3000); // Show message for 3 seconds
     } catch (error) {
@@ -107,7 +121,7 @@ const Profile = () => {
       await changePassword({
         currentPassword,
         newPassword,
-        confirmNewPassword
+        confirmNewPassword,
       });
       setPasswordChangeStatus("Password changed successfully!");
       setIsPasswordChangeDisabled(true); // Disable input fields after success
