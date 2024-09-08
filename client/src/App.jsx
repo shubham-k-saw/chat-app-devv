@@ -9,7 +9,7 @@ import { RecoilRoot, useSetRecoilState } from "recoil";
 import { currentUserAtomState } from "./stores/user/userAtom.js";
 import { getCurrentUser } from "./service/api.jsx";
 import { useNavigate } from "react-router-dom";
-
+import "./App.css";
 const App = () => {
   return (
     <RecoilRoot>
@@ -29,7 +29,7 @@ const AppContent = () => {
     const fetchData = async () => {
       try {
         const storedCurrentUserInfo = localStorage.getItem("userInfo");
-        console.log("app ke under")
+        console.log("app ke under");
         if (storedCurrentUserInfo) {
           setCurrentUser(JSON.parse(storedCurrentUserInfo));
         } else {
@@ -37,7 +37,6 @@ const AppContent = () => {
           setCurrentUser(res.data.data);
           localStorage.setItem("userInfo", JSON.stringify(res.data.data));
         }
-
       } catch (error) {
         console.error("Error fetching user data", error);
       }
@@ -57,5 +56,4 @@ const AppContent = () => {
   );
 };
 
-
-export default App
+export default App;
