@@ -3,6 +3,10 @@ import http from "http";
 import { Server } from "socket.io";
 import { Message } from "../model/message.model.js";
 import { sendRequest } from "../controller/friend.controller.js";
+import { logMessageToKafka } from "../db/kafkaProducer.js";
+import { publishMessage } from "../db/redis.js";
+
+const USING_KAFKA = process.env.USING_KAFKA
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -36,29 +40,62 @@ io.on("connection", (socket) => {
       senderId,
       receiverId,
     }) => {
-      const receiverSocketId = users[receiver];
+      // const receiverSocketId = users[receiver];
 
-      if (receiverSocketId) {
-        console.log("Send the message")
-        io.to(receiverSocketId).emit("private_message", {
-          receiverId,
-          senderId,
-          message,
-          messageId,
-          timestamp,
-        });
-      } else {
-        console.log(`Receiver ${receiver} not online`);
-      }
-
-      const newMessage = new Message({
-        sender: senderId,
-        receiver: receiverId,
+      // publishing message to redis channel
+      const msg = JSON.stringify({
+        sender,
+        receiver,
         messageId,
         message,
         timestamp,
-      });
-      await newMessage.save();
+        senderId,
+        receiverId,
+      })
+
+      publishMessage(msg)
+
+      // if (receiverSocketId) {
+      //   console.log("Send the message")
+      //   io.to(receiverSocketId).emit("private_message", {
+      //     receiverId,
+      //     senderId,
+      //     message,
+      //     messageId,
+      //     timestamp,
+      //   });
+      // } else {
+      //   console.log(`Receiver ${receiver} not online`);
+      // }
+
+      if (USING_KAFKA === 'true') {
+        console.log('Step 1: USING_KAFKA and log message to kafka')
+        logMessageToKafka(
+          senderId,
+          receiverId,
+          messageId,
+          message,
+          timestamp,
+        )
+      } else {
+        const newMessage = new Message({
+          sender: senderId,
+          receiver: receiverId,
+          messageId,
+          message,
+          timestamp,
+        });
+        await newMessage.save();
+      }
+
+      // const newMessage = new Message({
+      //   sender: senderId,
+      //   receiver: receiverId,
+      //   messageId,
+      //   message,
+      //   timestamp,
+      // });
+      // await newMessage.save();
     }
   );
 
@@ -66,7 +103,7 @@ io.on("connection", (socket) => {
   socket.on("typing", ({ sender, recipient }) => {
     const recipientSocketId = users[recipient];
     if (recipientSocketId) {
-      
+
       io.to(recipientSocketId).emit("typing", { sender });
     }
   });
@@ -135,7 +172,7 @@ io.on("connection", (socket) => {
     io.to(users[to]).emit("unfriend-request", { from });
   });
 
-  socket.on("delete-message", ({from, to, messageId}) => {
+  socket.on("delete-message", ({ from, to, messageId }) => {
     console.log(from, to)
     io.to(users[to]).emit("delete-message", { from, messageId });
   });
@@ -153,4 +190,4 @@ io.on("connection", (socket) => {
   });
 });
 
-export { server };
+export { server, io, users };

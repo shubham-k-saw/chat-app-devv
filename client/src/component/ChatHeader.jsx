@@ -7,7 +7,7 @@ import { selectedUserOnlineAtomState } from "../stores/user/userAtom";
 import UserDetailsModal from "./UserDetailsModal";
 
 const ChatHeader = ({ isTyping, selectedUser, onBackButtonClick }) => {
-  const isSelectedUserOnline = useRecoilValue(selectedUserOnlineAtomState);
+  // const isSelectedUserOnline = useRecoilValue(selectedUserOnlineAtomState);
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleImageClick = () => {
@@ -53,9 +53,9 @@ const ChatHeader = ({ isTyping, selectedUser, onBackButtonClick }) => {
                 {selectedUser.userName} is typing...
               </p>
             )}
-            {isSelectedUserOnline && !isTyping && (
+            {/* {isSelectedUserOnline && !isTyping && (
               <p className="text-xs text-green-500 font-semibold">Online</p>
-            )}
+            )} */}
           </div>
         </div>
       </div>

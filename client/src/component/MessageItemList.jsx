@@ -192,11 +192,10 @@ export const MessageItemList = ({ onSelectUser }) => {
         {/* Buttons to switch between Friends and Requests */}
         <div className="flex flex-center justify-center mb-2 border border-gray-200 rounded-lg">
           <button
-            className={`w-auto px-4 py-2 md:px-6 md:py-3 rounded-lg text-sm font-semibold transition-all duration-300 whitespace-nowrap text-center ${
-              selectedField === "friends"
+            className={`w-auto px-4 py-2 md:px-6 md:py-3 rounded-lg text-sm font-semibold transition-all duration-300 whitespace-nowrap text-center ${selectedField === "friends"
                 ? "text-blue-600 hover:text-blue-700"
                 : "text-black-600 hover:text-blue-700"
-            }`}
+              }`}
             onClick={() => {
               setSelectedField("friends");
               setSelectedUser({});
@@ -207,11 +206,10 @@ export const MessageItemList = ({ onSelectUser }) => {
             Friends
           </button>
           <button
-            className={`w-auto px-4 py-2 md:px-6 md:py-3 rounded-lg text-sm font-semibold transition-all duration-300 whitespace-nowrap text-center ${
-              selectedField === "requests"
+            className={`w-auto px-4 py-2 md:px-6 md:py-3 rounded-lg text-sm font-semibold transition-all duration-300 whitespace-nowrap text-center ${selectedField === "requests"
                 ? "text-blue-600 hover:text-blue-700"
                 : "text-black-600 hover:text-blue-700"
-            }`}
+              }`}
             onClick={() => {
               setSelectedField("requests");
               setSelectedUser({});
@@ -222,11 +220,10 @@ export const MessageItemList = ({ onSelectUser }) => {
             Requests
           </button>
           <button
-            className={`w-auto px-4 py-2 md:px-6 md:py-3 rounded-lg text-sm font-semibold transition-all duration-300 whitespace-nowrap text-center ${
-              selectedField === "findUsers"
+            className={`w-auto px-4 py-2 md:px-6 md:py-3 rounded-lg text-sm font-semibold transition-all duration-300 whitespace-nowrap text-center ${selectedField === "findUsers"
                 ? "text-blue-600 hover:text-blue-700"
                 : "text-black-600 hover:text-blue-700"
-            }`}
+              }`}
             onClick={() => {
               setSelectedField("findUsers");
               setSelectedUser({});
@@ -252,7 +249,7 @@ export const MessageItemList = ({ onSelectUser }) => {
                 }
                 key={friend._id}
                 username={friend.friendInfo.userName}
-                isOnline={findOnlineUser(friend.friendInfo.userName)}
+                // isOnline={findOnlineUser(friend.friendInfo.userName)}
                 onSelectUser={onSelectUser}
                 userInfo={friend.friendInfo}
                 isFriend={true}
@@ -267,7 +264,7 @@ export const MessageItemList = ({ onSelectUser }) => {
                 src={request.requestInfo.profilePicture || null}
                 key={request._id}
                 username={request.requestInfo.userName}
-                isOnline={findOnlineUser(request.requestInfo.userName)}
+                // isOnline={findOnlineUser(request.requestInfo.userName)}
                 onSelectUser={onSelectUser}
                 userInfo={request.requestInfo}
                 isFriend={false}
@@ -282,7 +279,7 @@ export const MessageItemList = ({ onSelectUser }) => {
                 src={user.profilePicture ? user.profilePicture : null}
                 key={user._id}
                 username={user.userName}
-                isOnline={findOnlineUser(user.userName)}
+                // isOnline={findOnlineUser(user.userName)}
                 onSelectUser={onSelectUser}
                 userInfo={user}
                 isFriend={false}
